@@ -43,7 +43,10 @@ const base = import.meta.env.BASE_URL;
       <div class="card"><h2 class="pcard__label">Contexte</h2><p>{data.context}</p></div>
       <div class="card"><h2 class="pcard__label">Objectif</h2><p>{data.goal}</p></div>
       <div class="card dgrid__full"><h2 class="pcard__label">Ce que j’ai fait</h2><ul class="ticks">{data.did.map((d) => <li>{d}</li>)}</ul></div>
-      <div class="card dgrid__full"><h2 class="pcard__label">Ce que j’ai appris</h2><p>{data.learned ?? <Todo />}</p></div>
+      {/* Sans texte, le bloc n'apparaît qu'en local : aucun emplacement vide n'est publié. */}
+      {(data.learned || import.meta.env.DEV) && (
+        <div class="card dgrid__full"><h2 class="pcard__label">Ce que j’ai appris</h2><p>{data.learned ?? <Todo />}</p></div>
+      )}
     </div>
 
     {data.attack.length > 0 && (

@@ -16,7 +16,7 @@ En ligne : https://deffojoel.github.io/portfolio/
 Pour ajouter un projet, copie un fichier de `src/content/projects/` et change son `order`.
 Sa page détaillée est créée automatiquement. Le texte placé sous le bloc d'en-tête `---` y apparaît.
 
-Un champ absent affiche `[À compléter]` sur le site : à résoudre avant publication.
+Si `learned` est absent d'un projet, `[À compléter]` s'affiche en local, et le bloc est masqué sur le site publié.
 
 ## Travailler en local
 
@@ -65,7 +65,7 @@ Ces réglages sont les seuls à changer : tous les liens internes en dépendent.
 ## Sécurité
 
 - GitHub Pages ne permet pas d'envoyer des en-têtes HTTP personnalisés. La CSP passe par une balise `meta`, qui ne couvre pas `frame-ancestors`, et HSTS, `X-Frame-Options` et `Permissions-Policy` ne sont pas réglables.
-- `public/_headers` contient la version complète, prête pour Cloudflare Pages ou Netlify. Il faudra y ajouter les domaines GoatCounter et Web3Forms s'ils sont activés.
+- `public/_headers` contient la version complète, prête pour Cloudflare Pages ou Netlify. Il faudra y ajouter le domaine Web3Forms si le formulaire est activé.
 - Aucun secret dans ce dépôt. `CV/`, `images/`, `references/` et `.env*` sont exclus par `.gitignore`.
 - Aucune dépendance n'est livrée au navigateur, et les polices sont auto-hébergées.
 - Le CV publié contient des données personnelles (adresse, téléphone, âge) : c'est un choix assumé, à revoir si besoin.

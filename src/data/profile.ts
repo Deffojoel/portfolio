@@ -34,7 +34,7 @@ export const profile = {
  * web3forms : la clé d'accès reçue par email. Elle est publique par conception.
  */
 export const services = {
-  goatcounter: '',
+  goatcounter: 'joeldeffo',
   web3forms: '',
 };
 
