@@ -1,0 +1,64 @@
+---
+/** Page détaillée d'un projet, générée pour chaque fichier de src/content/projects/. */
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Todo from '../../components/Todo.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const base = import.meta.env.BASE_URL;
+---
+<Base title={data.title} description={data.summary}>
+  <article class="detail wrap">
+    <a class="btn btn--sm" href={`${base}#projets`}><Icon name="arrowLeft" /> Tous les projets</a>
+    <header class="detail__head">
+      <div class="pcard__top">
+        <span class="iconbox"><Icon name={data.icon} /></span>
+        <span class="pcard__kicker">{data.kicker}</span>
+      </div>
+      <h1>{data.title}<span class="dot">.</span></h1>
+      <p class="detail__lead">{data.summary}</p>
+      <ul class="chips chips--blue">{data.stack.map((c) => <li>{c}</li>)}</ul>
+    </header>
+
+    {data.results && (
+      <section class="results" aria-label="Résultats">
+        {data.results.map((group) => (
+          <div class="card">
+            <h2 class="pcard__label">{group.label}</h2>
+            <ul class="ticks">{group.items.map((item) => <li>{item}</li>)}</ul>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <div class="dgrid">
+      <div class="card"><h2 class="pcard__label">Contexte</h2><p>{data.context}</p></div>
+      <div class="card"><h2 class="pcard__label">Objectif</h2><p>{data.goal}</p></div>
+      <div class="card dgrid__full"><h2 class="pcard__label">Ce que j’ai fait</h2><ul class="ticks">{data.did.map((d) => <li>{d}</li>)}</ul></div>
+      <div class="card dgrid__full"><h2 class="pcard__label">Ce que j’ai appris</h2><p>{data.learned ?? <Todo />}</p></div>
+    </div>
+
+    {data.attack.length > 0 && (
+      <div class="detail__attack">
+        <h2 class="pcard__label">MITRE ATT&CK</h2>
+        <ul class="attack">{data.attack.map((t) => <li class="mono">{t}</li>)}</ul>
+      </div>
+    )}
+
+    {project.body?.trim() && <div class="prose"><Content /></div>}
+
+    {data.repo && (
+      <div class="detail__actions">
+        <a class="btn btn--primary" href={data.repo} target="_blank" rel="noopener noreferrer"><Icon name="github" /> Voir le dépôt GitHub</a>
+      </div>
+    )}
+  </article>
+</Base>

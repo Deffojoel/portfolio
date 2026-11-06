@@ -1,0 +1,82 @@
+---
+/** Gabarit commun : balises meta, Open Graph, CSP, polices, en-tête et pied de page. */
+import '@fontsource-variable/outfit/index.css';
+import '@fontsource-variable/dm-sans/index.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/site.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { profile, services } from '../data/profile';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = `${profile.name}, ${profile.role.toLowerCase()}. ${profile.seeking} en ${profile.availability.zone}.`,
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} · Cybersécurité Blue Team, alternance`;
+const base = import.meta.env.BASE_URL;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(`${base}og-image.png`, Astro.site);
+const gc = services.goatcounter;
+
+/* GitHub Pages n'autorise pas les en-têtes HTTP : la CSP passe par une balise meta. */
+const csp = [
+  `default-src 'none'`,
+  `script-src 'self'${gc ? ' https://gc.zgo.at' : ''}`,
+  `style-src 'self'`,
+  `img-src 'self' data:${gc ? ` https://${gc}.goatcounter.com` : ''}`,
+  `font-src 'self'`,
+  `connect-src${services.web3forms ? ' https://api.web3forms.com' : ''}${gc ? ` https://${gc}.goatcounter.com` : ''}${!services.web3forms && !gc ? " 'none'" : ''}`,
+  `form-action${services.web3forms ? ' https://api.web3forms.com' : " 'none'"}`,
+  `base-uri 'none'`,
+].join('; ');
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {!import.meta.env.DEV && <meta http-equiv="Content-Security-Policy" content={csp} />}
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="icon" href={`${base}favicon-32.png`} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <meta name="theme-color" content="#000000" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${profile.name}, ${profile.role}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <Header />
+    <main id="contenu"><slot /></main>
+    <Footer />
+    {/* Version figée avec contrôle d'intégrité (SRI) : le navigateur refuse tout script modifié. */}
+    {gc && <script is:inline data-goatcounter={`https://${gc}.goatcounter.com/count`} async src="https://gc.zgo.at/count.v5.js" crossorigin="anonymous" integrity="sha384-atnOLvQb9t+jTSipvd75X2yginT4PjVbqDdlJAmxMm+wYElFmeR6EmLP5bYeoRVQ"></script>}
+  </body>
+</html>

@@ -1,0 +1,45 @@
+---
+/** Carte de projet. La première, mise en avant, affiche aussi les résultats. */
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+
+interface Props { project: CollectionEntry<'projects'>; featured?: boolean }
+const { project, featured = false } = Astro.props;
+const { id, data } = project;
+const base = import.meta.env.BASE_URL;
+const chips = featured ? data.stack : data.stack.slice(0, 4);
+---
+<article class:list={['card', 'pcard', 'reveal', { 'pcard--featured': featured }]}>
+  <div class="pcard__main">
+    <div class="pcard__top">
+      <span class="iconbox"><Icon name={data.icon} /></span>
+      <span class="pcard__kicker">{data.kicker}</span>
+    </div>
+    <h3 class="pcard__title">{data.title}</h3>
+    <p class="pcard__text">{featured ? data.summary : data.outcome}</p>
+    <ul class="chips chips--blue">{chips.map((c) => <li>{c}</li>)}</ul>
+    <div class="pcard__actions">
+      <a class="btn btn--primary btn--sm" href={`${base}projets/${id}/`}>
+        Voir le projet<span class="sr-only"> : {data.title}</span> <Icon name="arrowUpRight" />
+      </a>
+      {data.repo && (
+        <a class="btn btn--sm" href={data.repo} target="_blank" rel="noopener noreferrer">
+          <Icon name="github" /> GitHub<span class="sr-only"> : {data.title}</span>
+        </a>
+      )}
+    </div>
+  </div>
+  {featured && data.results && (
+    <div class="pcard__results">
+      {data.results.map((group) => (
+        <div>
+          <h4 class="pcard__label">{group.label}</h4>
+          <ul class="ticks">{group.items.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      ))}
+      {data.attack.length > 0 && (
+        <ul class="attack">{data.attack.map((t) => <li class="mono">{t}</li>)}</ul>
+      )}
+    </div>
+  )}
+</article>

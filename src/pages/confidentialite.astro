@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, services } from '../data/profile';
+---
+<Base title="Confidentialité">
+  <article class="detail wrap prose-page">
+    <h1>Confidentialité<span class="dot">.</span></h1>
+    <div class="prose">
+      <p>Ce site ne dépose aucun cookie et ne contient aucun traceur publicitaire. Il ne charge aucune police ni aucun script depuis Google.</p>
+
+      {services.goatcounter && (
+        <Fragment>
+          <h2>Mesure d’audience</h2>
+          <p>Les visites sont comptées avec GoatCounter, sans cookie et de façon agrégée : pages vues, site d’origine, navigateur et pays. Aucun visiteur n’est identifié.</p>
+        </Fragment>
+      )}
+
+      {services.web3forms && (
+        <Fragment>
+          <h2>Formulaire de contact</h2>
+          <p>Le nom, l’email et le message envoyés via le formulaire transitent par le service Web3Forms, puis me parviennent par email. Ils servent uniquement à vous répondre.</p>
+        </Fragment>
+      )}
+
+      <h2>Hébergement</h2>
+      <p>Le site est hébergé par GitHub Pages. Comme tout hébergeur, GitHub peut enregistrer des données techniques de connexion, dont l’adresse IP, pour assurer la sécurité du service.</p>
+
+      <h2>Vos droits</h2>
+      <p>Pour toute question ou pour exercer vos droits d’accès, de rectification ou de suppression, écrivez à <a class="link" href={`mailto:${profile.email}`}>{profile.email}</a>. Vous pouvez aussi saisir la CNIL.</p>
+    </div>
+  </article>
+</Base>

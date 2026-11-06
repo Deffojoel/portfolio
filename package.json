@@ -1,0 +1,22 @@
+{
+  "name": "portfolio-joel-deffo",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Portfolio de Joël Deffo, cybersécurité Blue Team",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "photos": "node scripts/process-photos.mjs"
+  },
+  "devDependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/outfit": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "astro": "^7.3.8",
+    "lucide-static": "^1.70.0",
+    "sharp": "^0.35.5"
+  }
+}

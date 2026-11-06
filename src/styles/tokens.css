@@ -1,0 +1,39 @@
+/* Design tokens. Couleurs issues de l'identité de Joël : noir, blanc, bleu #308FF0. */
+:root {
+  color-scheme: dark;
+
+  --bg: #000;
+  --card: #0a0f16;
+  --card-2: #0f1722;
+  --ink: #f2f6fa;
+  --ink-2: #b3bfcc;
+  --ink-3: #8896a6;
+  --line: #1b2736;
+  --line-2: #2b3c51;
+  --accent: #308ff0;
+  --accent-soft: #7dbbf8;
+  --accent-bg: #0e2238;
+  --accent-line: #1f4a75;
+  --on-accent: #04121f;
+  --todo: #f0b429;
+
+  --display: 'Outfit Variable', system-ui, sans-serif;
+  --sans: 'DM Sans Variable', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+
+  --text-xs: .8125rem;
+  --text-s: .9375rem;
+  --text-m: 1rem;
+  --title-card: 1.125rem;
+  --title-section: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  --title-hero: clamp(3rem, 7.5vw, 6.75rem);
+
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --section: clamp(3.5rem, 7vw, 6rem);
+  --max: 1240px;
+
+  --radius: 999px;
+  --radius-m: 12px;
+  --radius-l: 20px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}

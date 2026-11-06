@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/profile';
+---
+<Base title="Mentions légales">
+  <article class="detail wrap prose-page">
+    <h1>Mentions légales<span class="dot">.</span></h1>
+    <div class="prose">
+      <h2>Éditeur du site</h2>
+      <p>{profile.fullName}, particulier.<br />{profile.city}<br />Contact : <a class="link" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+      <p>Directeur de la publication : {profile.fullName}.</p>
+      <h2>Hébergement</h2>
+      <p>GitHub Pages, service de GitHub, Inc., 88 Colin P Kelly Jr Street, San Francisco, CA 94107, États-Unis.</p>
+      <h2>Propriété intellectuelle</h2>
+      <p>Les textes, photographies et le logo de ce site appartiennent à {profile.name}. Toute réutilisation nécessite son accord préalable.</p>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,21 @@
+---
+import Logo from './Logo.astro';
+const base = import.meta.env.BASE_URL;
+const nav = [
+  ['Profil', 'profil'],
+  ['Projets', 'projets'],
+  ['Compétences', 'competences'],
+  ['Parcours', 'parcours'],
+];
+---
+<header class="header">
+  <div class="header__bar">
+    <a class="header__logo" href={base} aria-label="Joël Deffo, accueil"><Logo /></a>
+    <nav aria-label="Navigation principale">
+      <ul class="header__nav">
+        {nav.map(([label, id]) => <li><a href={`${base}#${id}`}>{label}</a></li>)}
+        <li><a class="header__cta" href={`${base}#contact`}>Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

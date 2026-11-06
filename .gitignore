@@ -1,0 +1,30 @@
+# Originaux et sources : jamais publiés
+/CV/
+/images/
+/references/
+
+# Dépendances et build
+node_modules/
+dist/
+.astro/
+
+# Secrets et environnement
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Système / éditeurs
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+.claude/
+
+# Journaux
+*.log
+
+# Détourage intermédiaire
+/src/assets/photos/source/

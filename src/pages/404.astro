@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
+---
+<Base title="Page introuvable" noindex>
+  <section class="detail wrap notfound">
+    <p class="tag">Erreur 404</p>
+    <h1>Cette page n’existe pas<span class="dot">.</span></h1>
+    <a class="btn btn--primary" href={base}>Retour à l’accueil</a>
+  </section>
+</Base>

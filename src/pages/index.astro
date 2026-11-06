@@ -1,0 +1,279 @@
+---
+import { getCollection } from 'astro:content';
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Rings from '../components/Rings.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import hero from '../assets/photos/hero.jpg';
+import portrait from '../assets/photos/portrait.jpg';
+import {
+  profile, services, about, motto, skills, experience, education, certifications, rooms,
+} from '../data/profile';
+
+const base = import.meta.env.BASE_URL;
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const [first, ...rest] = profile.name.split(' ');
+---
+<Base>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <Rings />
+      <Picture
+        src={hero}
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1400]}
+        sizes="(min-width: 900px) 52vw, 100vw"
+        alt="Portrait en noir et blanc de Joël Deffo, de face, en t-shirt blanc, sur fond noir."
+        loading="eager"
+        fetchpriority="high"
+        class="hero__img"
+      />
+    </div>
+    <div class="wrap hero__content">
+      <p class="hero__status mono"><span class="pulse" aria-hidden="true"></span>{profile.availability.short}</p>
+      <h1 id="hero-title" class="hero__name">{first} <span>{rest.join(' ')}<span class="hero__dot">.</span></span></h1>
+      <div class="hero__foot">
+        <div>
+          <p class="hero__role">{profile.role}</p>
+          <p class="hero__lead">{profile.lead} {profile.seeking}.</p>
+        </div>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#projets">Voir mes projets <Icon name="arrowDown" /></a>
+          <a class="btn" href={`${base}${profile.cv}`} download>Télécharger mon CV <Icon name="download" /></a>
+          <a class="btn" href="#contact">Me contacter</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="profil" class="section section--glow-right" aria-labelledby="profil-title">
+    <div class="wrap">
+      <header class="head reveal">
+        <p class="tag">Profil</p>
+        <h2 id="profil-title">{motto.replace('.', '')}<span class="dot">.</span></h2>
+      </header>
+      <div class="bento">
+        <div class="card bento__text reveal">
+          {about.map((p) => <p>{p}</p>)}
+          <ul class="chips bento__chips">
+            <li>{profile.availability.rhythm}</li>
+            <li>{profile.availability.zone}</li>
+            <li>Démarrage : {profile.availability.start.toLowerCase()}</li>
+          </ul>
+        </div>
+        <figure class="card bento__photo reveal">
+          <Picture
+            src={portrait}
+            formats={['avif', 'webp']}
+            widths={[420, 720, 1000]}
+            sizes="(min-width: 900px) 30vw, 100vw"
+            alt="Portrait en noir et blanc de Joël Deffo en chemise blanche, le regard vers l'objectif."
+            loading="lazy"
+          />
+        </figure>
+        <div class="card card--blue bento__seek reveal">
+          <span class="iconbox iconbox--ink"><Icon name="shieldCheck" /></span>
+          <div>
+            <p class="bento__label">Je recherche</p>
+            <p class="bento__value">{profile.seeking}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projets" class="section section--glow-left" aria-labelledby="projets-title">
+    <div class="wrap">
+      <header class="head reveal">
+        <p class="tag">Projets</p>
+        <h2 id="projets-title">Ce que j’ai construit<span class="dot">.</span></h2>
+      </header>
+      <div class="pgrid">
+        {projects.map((project, index) => <ProjectCard project={project} featured={index === 0} />)}
+      </div>
+    </div>
+  </section>
+
+  <section id="competences" class="section" aria-labelledby="competences-title">
+    <div class="wrap">
+      <header class="head reveal">
+        <p class="tag">Compétences</p>
+        <h2 id="competences-title">Les outils du quotidien<span class="dot">.</span></h2>
+      </header>
+      <div class="sgrid">
+        {skills.map((group) => (
+          <div class="card scard reveal">
+            <h3 class="scard__title"><span class="iconbox iconbox--sm"><Icon name={group.icon} /></span>{group.title}</h3>
+            <ul class="chips">{group.items.map((item) => <li>{item}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="veille" class="section section--glow-right" aria-labelledby="veille-title">
+    <div class="wrap">
+      <header class="head reveal">
+        <p class="tag">Veille et pratique</p>
+        <h2 id="veille-title">Attaquer pour mieux défendre<span class="dot">.</span></h2>
+        <p class="head__lead">Sur TryHackMe, chaque room documentée suit la même logique : reconnaissance, exploitation, post-exploitation, puis ce qu’il faut retenir et les recommandations défensives.</p>
+      </header>
+      <div class="vgrid">
+        {rooms.map((room) => (
+          <a class="card card--link rcard reveal" href={room.href} target="_blank" rel="noopener noreferrer">
+            <span class="iconbox iconbox--sm"><Icon name="flag" /></span>
+            <span class="rcard__body">
+              <span class="rcard__title">{room.title}</span>
+              <span class="rcard__topic">{room.topic}</span>
+              <span class="mono rcard__tech">{room.technique}</span>
+            </span>
+            <span class="rcard__arrow"><Icon name="arrowUpRight" /></span>
+          </a>
+        ))}
+      </div>
+      <div class="vactions reveal">
+        <a class="btn" href={profile.links.tryhackme} target="_blank" rel="noopener noreferrer">Mon profil TryHackMe <Icon name="arrowUpRight" /></a>
+        <a class="btn" href={profile.links.writeups} target="_blank" rel="noopener noreferrer"><Icon name="github" /> Tous les write-ups</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="parcours" class="section section--glow-left" aria-labelledby="parcours-title">
+    <div class="wrap">
+      <header class="head reveal">
+        <p class="tag">Parcours</p>
+        <h2 id="parcours-title">Du terrain à la défense<span class="dot">.</span></h2>
+      </header>
+      <div class="pcols">
+        <div>
+          <h3 class="subhead">Expérience</h3>
+          <ol class="timeline">
+            {experience.map((item) => (
+              <li class="timeline__item reveal">
+                <p class="timeline__period">{item.period}</p>
+                <p class="timeline__title">{item.title}</p>
+                <p class="timeline__org">{item.org}</p>
+                <p class="timeline__text">{item.summary}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div class="pcols__side">
+          <div>
+            <h3 class="subhead">Formation</h3>
+            <ul class="stack">
+              {education.map((item) => (
+                <li class="card lcard reveal">
+                  <span class="iconbox iconbox--sm"><Icon name="graduationCap" /></span>
+                  <div>
+                    <p class="lcard__title">{item.title}</p>
+                    <p class="lcard__meta">{item.org}{item.note && `, ${item.note}`}</p>
+                    <span class="pill">{item.period}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 class="subhead">Certifications</h3>
+            <ul class="stack">
+              {certifications.map((item) => (
+                <li class="card lcard reveal">
+                  <span class="iconbox iconbox--sm"><Icon name="badgeCheck" /></span>
+                  <div>
+                    <p class="lcard__title">{item.title}</p>
+                    <p class="lcard__meta">{item.org}, {item.note}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="card card--blue cta reveal">
+        <div>
+          <h2 id="contact-title">Parlons de votre alternance<span class="cta__dot">.</span></h2>
+          <p>{profile.availability.short} en {profile.availability.zone}, démarrage {profile.availability.start.toLowerCase()}.</p>
+        </div>
+        <div class="cta__actions">
+          <a class="btn btn--ink" href={`mailto:${profile.email}`}><Icon name="mail" /> M’écrire</a>
+          <a class="btn btn--ghost-ink" href={`${base}${profile.cv}`} download><Icon name="download" /> Mon CV</a>
+        </div>
+      </div>
+
+      <div class="cgrid">
+        <div class="card ccard reveal">
+          <span class="iconbox iconbox--sm"><Icon name="mail" /></span>
+          <div class="ccard__body">
+            <p class="ccard__label">Email</p>
+            <a class="ccard__value link" href={`mailto:${profile.email}`}>{profile.email}</a>
+          </div>
+          <button class="copy" type="button" data-copy={profile.email} hidden aria-label="Copier l’adresse email">
+            <Icon name="copy" /><span data-copy-label role="status">Copier</span>
+          </button>
+        </div>
+        <div class="card ccard reveal">
+          <span class="iconbox iconbox--sm"><Icon name="phone" /></span>
+          <div class="ccard__body">
+            <p class="ccard__label">Téléphone</p>
+            <a class="ccard__value link" href={`tel:${profile.phoneHref}`}>{profile.phone}</a>
+          </div>
+        </div>
+        <div class="card ccard reveal">
+          <span class="iconbox iconbox--sm"><Icon name="linkedin" /></span>
+          <div class="ccard__body">
+            <p class="ccard__label">LinkedIn</p>
+            <a class="ccard__value link" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">joel-deffo</a>
+          </div>
+        </div>
+        <div class="card ccard reveal">
+          <span class="iconbox iconbox--sm"><Icon name="github" /></span>
+          <div class="ccard__body">
+            <p class="ccard__label">GitHub</p>
+            <a class="ccard__value link" href={profile.links.github} target="_blank" rel="noopener noreferrer">Deffojoel</a>
+          </div>
+        </div>
+        <div class="card ccard reveal">
+          <span class="iconbox iconbox--sm"><Icon name="mapPin" /></span>
+          <div class="ccard__body">
+            <p class="ccard__label">Lieu</p>
+            <p class="ccard__value">{profile.city}</p>
+          </div>
+        </div>
+      </div>
+
+      {services.web3forms && (
+        <form class="card form reveal" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value={services.web3forms} />
+          <input type="hidden" name="subject" value="Message depuis le portfolio" />
+          <div class="form__trap" aria-hidden="true">
+            <label>Ne pas remplir <input type="text" name="botcheck" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div class="form__field">
+            <label for="f-name">Nom</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120" />
+          </div>
+          <div class="form__field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="160" />
+          </div>
+          <div class="form__field form__field--full">
+            <label for="f-message">Message</label>
+            <textarea id="f-message" name="message" rows="5" required maxlength="4000"></textarea>
+          </div>
+          <button class="btn btn--primary" type="submit">Envoyer</button>
+          <p class="form__status" id="form-status" role="status"></p>
+          <p class="form__note">Vos données servent uniquement à vous répondre. <a class="link" href={`${base}confidentialite/`}>En savoir plus</a></p>
+        </form>
+      )}
+    </div>
+  </section>
+  <script is:inline src={`${base}js/copy.js`} defer></script>
+  {services.web3forms && <script is:inline src={`${base}js/contact.js`} defer></script>}
+</Base>
